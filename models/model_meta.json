@@ -1,0 +1,8 @@
+{
+  "champion_name": "CatBoost",
+  "optimal_threshold": 0.5300000000000004,
+  "test_pr_auc": 0.6772276891542967,
+  "test_roc_auc": 0.8444573870932237,
+  "test_f1": 0.6312684365781711,
+  "test_recall": 0.7615658362989324
+}
