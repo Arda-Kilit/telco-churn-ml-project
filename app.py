@@ -338,3 +338,11 @@ with tab3:
         fpath = os.path.join(FIG_DIR, fname)
         if os.path.exists(fpath):
             st.image(fpath, caption=caption, use_container_width=True)
+
+st.divider()
+st.caption(
+    "⚠️ **Model Sınırlılığı ve Sorumlu Kullanım Notu:** Bu uygulama IBM Telco Customer Churn kesit "
+    "veri setiyle eğitilmiş olasılıksal bir tahmin modeli sunar; kesin sonuç garanti etmez ve "
+    "yanlış pozitif (FP) veya yanlış negatif (FN) tahminler içerebilir. Çıktılar, iş kararlarında "
+    "tek başına değil, müşteri ilişkileri uzman değerlendirmesiyle birlikte kullanılmalıdır."
+)
