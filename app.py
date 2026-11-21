@@ -1,12 +1,19 @@
 """
 BTK Uçtan Uca Makine Öğrenmesi Projesi — Telco Customer Churn
-Aşama 13–14: Modern & Profesyonel Streamlit Karar Destek Arayüzü
+Aşama 13–14: Yeni Nesil SaaS Kalitesinde Streamlit Karar Destek Platformu
+Özellikler:
+- Dinamik SVG Hız Göstergesi (Risk Gauge)
+- Gerçek CatBoost Modeliyle Canlı "Tutundurma (What-If) Simülasyonu"
+- Sol Menüde Tek Tıkla Demo Senaryoları
+- Toplu CSV Skorlama + Segment Dağılımı + İndirme
+- İnteraktif Model Karşılaştırması & 8 Gerçek Analiz Grafiği
 
 Çalıştırma:
     streamlit run app.py
 """
 
 import json
+import math
 import os
 
 import joblib
@@ -24,7 +31,7 @@ from src.features import (
 )
 
 st.set_page_config(
-    page_title="Telco Churn AI | Karar Destek Sistemi",
+    page_title="Telco Churn AI | Karar Destek Platformu",
     page_icon="📡",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -38,7 +45,7 @@ FIG_DIR = "figures"
 RANDOM_STATE = 42
 
 # ==========================================================
-# CUSTOM EXECUTIVE UI STYLING (CSS)
+# NEXT-GEN SAAS CSS THEME (OBSIDIAN + TEAL + CORAL)
 # ==========================================================
 st.markdown(
     """
@@ -50,54 +57,60 @@ st.markdown(
     }
 
     .block-container {
-        padding-top: 1.4rem;
-        padding-bottom: 2.2rem;
-        max-width: 1220px;
+        padding-top: 1.2rem;
+        padding-bottom: 2.4rem;
+        max-width: 1260px;
     }
 
-    /* Executive Hero Banner */
-    .hero-banner {
-        background: linear-gradient(135deg, #0B1F3A 0%, #163A5F 58%, #1E293B 100%);
-        border-radius: 16px;
-        padding: 26px 30px;
+    /* Executive Hero Header */
+    .hero-wrap {
+        background: radial-gradient(circle at 85% 20%, rgba(13, 148, 136, 0.35), transparent 45%),
+                    radial-gradient(circle at 12% 85%, rgba(244, 63, 94, 0.25), transparent 40%),
+                    linear-gradient(135deg, #090D16 0%, #111827 55%, #0F172A 100%);
+        border-radius: 18px;
+        padding: 28px 32px;
         margin-bottom: 1.35rem;
         border: 1px solid rgba(148, 163, 184, 0.22);
-        box-shadow: 0 12px 30px rgba(11, 31, 58, 0.22);
+        box-shadow: 0 16px 38px rgba(2, 6, 23, 0.32);
         position: relative;
         overflow: hidden;
     }
-    .hero-banner::after {
+    .hero-wrap::before {
         content: "";
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 6px;
-        height: 100%;
-        background: linear-gradient(180deg, #E11D48 0%, #38BDF8 100%);
+        top: 0; left: 0; width: 100%; height: 4px;
+        background: linear-gradient(90deg, #0D9488 0%, #38BDF8 50%, #F43F5E 100%);
     }
-    .hero-kicker {
-        font-size: 0.78rem;
+    .hero-pill {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-size: 0.74rem;
         font-weight: 700;
-        letter-spacing: 0.10em;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: #7DD3FC;
-        margin-bottom: 6px;
+        color: #5EEAD4;
+        background: rgba(13, 148, 136, 0.18);
+        border: 1px solid rgba(94, 234, 212, 0.32);
+        margin-bottom: 10px;
     }
     .hero-title {
-        font-size: 1.85rem;
+        font-size: 1.95rem;
         font-weight: 800;
         color: #FFFFFF;
         margin: 0 0 8px 0;
-        line-height: 1.2;
+        line-height: 1.18;
+        letter-spacing: -0.02em;
     }
-    .hero-sub {
-        font-size: 0.96rem;
+    .hero-desc {
+        font-size: 0.95rem;
         color: #CBD5E1;
         margin: 0;
-        line-height: 1.45;
+        max-width: 820px;
+        line-height: 1.5;
     }
 
-    /* Executive KPI Cards */
+    /* KPI Strip */
     .kpi-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -107,28 +120,34 @@ st.markdown(
     @media (max-width: 900px) {
         .kpi-grid { grid-template-columns: repeat(2, 1fr); }
     }
-    .kpi-card {
-        background: rgba(30, 41, 59, 0.55);
+    .kpi-box {
+        background: rgba(15, 23, 42, 0.55);
         border: 1px solid rgba(148, 163, 184, 0.22);
-        border-top: 3px solid #38BDF8;
-        border-radius: 12px;
-        padding: 15px 18px;
+        border-radius: 14px;
+        padding: 16px 18px;
+        position: relative;
+        overflow: hidden;
     }
-    .kpi-card.accent {
-        border-top-color: #E11D48;
+    .kpi-box::after {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 3px;
+        background: #0D9488;
     }
-    .kpi-label {
-        font-size: 0.78rem;
-        font-weight: 600;
+    .kpi-box.coral::after { background: #F43F5E; }
+    .kpi-box.sky::after { background: #38BDF8; }
+    .kpi-lbl {
+        font-size: 0.74rem;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
-        opacity: 0.78;
+        letter-spacing: 0.06em;
+        opacity: 0.72;
         margin-bottom: 6px;
     }
-    .kpi-value {
-        font-size: 1.55rem;
+    .kpi-val {
+        font-size: 1.65rem;
         font-weight: 800;
-        line-height: 1.15;
+        line-height: 1.1;
         margin-bottom: 4px;
     }
     .kpi-sub {
@@ -136,59 +155,61 @@ st.markdown(
         opacity: 0.72;
     }
 
-    /* Prediction Result Card */
-    .result-card {
-        border-radius: 14px;
-        padding: 22px 24px;
-        margin: 14px 0 18px 0;
-        border: 1px solid rgba(148, 163, 184, 0.25);
-        background: rgba(15, 23, 42, 0.55);
+    /* Prediction Panels */
+    .panel-card {
+        border-radius: 16px;
+        padding: 20px 22px;
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        background: rgba(15, 23, 42, 0.52);
+        height: 100%;
     }
-    .result-high { border-left: 6px solid #E11D48; }
-    .result-mid  { border-left: 6px solid #F59E0B; }
-    .result-low  { border-left: 6px solid #10B981; }
-
-    .badge-pill {
+    .badge-status {
         display: inline-block;
-        padding: 4px 12px;
+        padding: 5px 13px;
         border-radius: 999px;
-        font-size: 0.80rem;
+        font-size: 0.78rem;
         font-weight: 700;
-        letter-spacing: 0.03em;
-        margin-bottom: 8px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
     }
-    .pill-high { background: rgba(225, 29, 72, 0.18); color: #FB7185; border: 1px solid rgba(225, 29, 72, 0.4); }
-    .pill-mid  { background: rgba(245, 158, 11, 0.18); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.4); }
-    .pill-low  { background: rgba(16, 185, 129, 0.18); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .st-high { background: rgba(244, 63, 94, 0.18); color: #FDA4AF; border: 1px solid rgba(244, 63, 94, 0.45); }
+    .st-mid  { background: rgba(245, 158, 11, 0.18); color: #FCD34D; border: 1px solid rgba(245, 158, 11, 0.45); }
+    .st-low  { background: rgba(16, 185, 129, 0.18); color: #6EE7B7; border: 1px solid rgba(16, 185, 129, 0.45); }
 
-    .driver-item {
+    .sim-card {
+        border-radius: 14px;
+        padding: 18px 20px;
+        margin-top: 14px;
+        background: linear-gradient(135deg, rgba(13, 148, 136, 0.14), rgba(56, 189, 248, 0.08));
+        border: 1px solid rgba(94, 234, 212, 0.35);
+    }
+    .driver-chip {
         background: rgba(148, 163, 184, 0.10);
-        border: 1px solid rgba(148, 163, 184, 0.18);
-        border-radius: 9px;
+        border: 1px solid rgba(148, 163, 184, 0.20);
+        border-radius: 10px;
         padding: 10px 14px;
         margin-bottom: 8px;
-        font-size: 0.90rem;
+        font-size: 0.89rem;
         line-height: 1.45;
     }
+    .driver-chip.risk { border-left: 4px solid #F43F5E; }
+    .driver-chip.safe { border-left: 4px solid #10B981; }
 
-    /* Responsible Use Footer */
-    .disclaimer-box {
-        margin-top: 1.6rem;
+    .disclaimer-card {
+        margin-top: 1.8rem;
         padding: 14px 18px;
-        border-radius: 10px;
+        border-radius: 12px;
         background: rgba(148, 163, 184, 0.08);
         border: 1px solid rgba(148, 163, 184, 0.22);
-        font-size: 0.83rem;
+        font-size: 0.82rem;
         line-height: 1.5;
         opacity: 0.88;
     }
 
-    /* Tabs polish */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-    }
+    .stTabs [data-baseweb="tab-list"] { gap: 8px; }
     .stTabs [data-baseweb="tab"] {
-        border-radius: 8px 8px 0 0;
+        border-radius: 10px 10px 0 0;
         padding: 10px 18px;
         font-weight: 600;
     }
@@ -199,21 +220,15 @@ st.markdown(
 
 
 # ==========================================================
-# MODEL LOADING (VERSION-PROOF WITH DETERMINISTIC FALLBACK)
+# VERSION-PROOF MODEL LOADER
 # ==========================================================
 def _train_champion_in_place():
-    """
-    Deterministic fallback when a joblib pickle created in another Python/scikit-learn
-    version (e.g., Colab Python 3.12 -> Streamlit Cloud Python 3.14) cannot be unpickled.
-    Rebuilds and fits the exact tuned champion pipeline on the same 70% train split.
-    """
     df = pd.read_csv(DATA_PATH)
     y = (df["Churn"] == "Yes").astype(int)
     X = df.drop(columns=["Churn"])
     X_train, _, y_train, _ = train_test_split(
         X, y, test_size=0.30, stratify=y, random_state=RANDOM_STATE
     )
-
     preprocessor = ColumnTransformer(
         transformers=[
             ("num", StandardScaler(), NUMERIC_FEATURES),
@@ -221,7 +236,6 @@ def _train_champion_in_place():
         ],
         remainder="drop",
     )
-
     try:
         from catboost import CatBoostClassifier
 
@@ -247,7 +261,6 @@ def _train_champion_in_place():
             random_state=RANDOM_STATE,
             n_jobs=-1,
         )
-
     pipe = Pipeline(
         steps=[
             ("fe", TelcoFeatureEngineer()),
@@ -263,17 +276,14 @@ def _train_champion_in_place():
 def load_artifacts():
     meta = json.load(open(META_PATH, encoding="utf-8")) if os.path.exists(META_PATH) else {}
     metrics = json.load(open(METRICS_PATH, encoding="utf-8")) if os.path.exists(METRICS_PATH) else None
-
     model = None
     if os.path.exists(MODEL_PATH):
         try:
             model = joblib.load(MODEL_PATH)
         except Exception:
             model = None
-
     if model is None and os.path.exists(DATA_PATH):
         model = _train_champion_in_place()
-
     return model, meta, metrics
 
 
@@ -282,58 +292,92 @@ def get_risk_profile(prob: float, threshold: float):
         return (
             "Yüksek Risk",
             "🔴",
-            "result-high",
-            "pill-high",
+            "st-high",
+            "#F43F5E",
             "Acil tutundurma teklifi: 1 yıllık sözleşme indirimi + 3 ay ücretsiz Teknik Destek önerin.",
         )
     if prob >= threshold * 0.70:
         return (
             "Orta Risk",
             "🟠",
-            "result-mid",
-            "pill-mid",
+            "st-mid",
+            "#F59E0B",
             "Proaktif iletişim: Otomatik ödeme indirimi ve Çevrimiçi Güvenlik paketi tanıtın.",
         )
     return (
         "Düşük Risk",
         "🟢",
-        "result-low",
-        "pill-low",
+        "st-low",
+        "#10B981",
         "Mevcut memnuniyeti koruyun; sadakat programı veya çapraz satış tekliflerine dahil edin.",
     )
+
+
+def render_svg_gauge(prob: float, threshold: float, color: str) -> str:
+    """Clean, zero-dependency SVG semi-circular risk gauge."""
+    pct = max(0.0, min(1.0, prob))
+    radius = 84
+    circumference = math.pi * radius
+    dash_filled = circumference * pct
+    dash_empty = circumference - dash_filled
+
+    # Threshold tick angle (180 deg = left, 0 deg = right)
+    thr_angle = math.pi * (1.0 - max(0.0, min(1.0, threshold)))
+    tx1 = 110 + (radius - 10) * math.cos(thr_angle)
+    ty1 = 105 - (radius - 10) * math.sin(thr_angle)
+    tx2 = 110 + (radius + 10) * math.cos(thr_angle)
+    ty2 = 105 - (radius + 10) * math.sin(thr_angle)
+
+    return f"""
+    <div style="display:flex; justify-content:center; align-items:center; padding:6px 0;">
+      <svg viewBox="0 0 220 130" width="240" height="142" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 26 105 A 84 84 0 0 1 194 105"
+              fill="none" stroke="rgba(148,163,184,0.22)" stroke-width="16" stroke-linecap="round"/>
+        <path d="M 26 105 A 84 84 0 0 1 194 105"
+              fill="none" stroke="{color}" stroke-width="16" stroke-linecap="round"
+              stroke-dasharray="{dash_filled:.1f} {dash_empty:.1f}"/>
+        <line x1="{tx1:.1f}" y1="{ty1:.1f}" x2="{tx2:.1f}" y2="{ty2:.1f}"
+              stroke="#E2E8F0" stroke-width="2.5" stroke-linecap="round"/>
+        <text x="110" y="90" text-anchor="middle" fill="currentColor"
+              font-size="30" font-weight="800" font-family="Inter, sans-serif">%{pct * 100:.1f}</text>
+        <text x="110" y="112" text-anchor="middle" fill="#94A3B8"
+              font-size="10.5" font-weight="600" font-family="Inter, sans-serif">CHURN OLASILIĞI (Eşik: {threshold:.2f})</text>
+      </svg>
+    </div>
+    """
 
 
 def explain_customer_drivers(row: dict):
     drivers = []
     if row["Contract"] == "Month-to-month":
-        drivers.append(("⚠️ Risk", "Aylık (taahhütsüz) sözleşme — veri setinde %42,7 churn oranı ile en güçlü risk faktörüdür."))
+        drivers.append(("risk", "Aylık (Taahhütsüz) Sözleşme", "Veri setinde %42,7 churn oranı ile en güçlü kayıp tetikleyicisi."))
     elif row["Contract"] == "Two year":
-        drivers.append(("✅ Koruyucu", "İki yıllık uzun dönemli sözleşme — veri setinde churn oranı yalnızca %2,8'dir."))
+        drivers.append(("safe", "İki Yıllık Sözleşme", "Veri setinde churn oranı yalnızca %2,8 düzeyinde."))
 
     if row["tenure"] <= 12:
-        drivers.append(("⚠️ Risk", f"Kısa abonelik süresi ({row['tenure']} ay) — müşteri kaybı ilk 12 ayda yoğunlaşır."))
+        drivers.append(("risk", f"Kısa Abonelik Süresi ({row['tenure']} ay)", "Müşteri kaybı ilk 12 aylık erken dönemde yoğunlaşır."))
     elif row["tenure"] >= 48:
-        drivers.append(("✅ Koruyucu", f"Uzun abonelik sadakati ({row['tenure']} ay) — kayıp olasılığını belirgin biçimde azaltır."))
+        drivers.append(("safe", f"Yüksek Sadakat ({row['tenure']} ay)", "Uzun abonelik geçmişi ayrılma olasılığını belirgin biçimde düşürür."))
 
     if row["InternetService"] == "Fiber optic":
-        drivers.append(("⚠️ Risk", "Fiber internet paketi — veri setinde %41,9 churn oranı ile yüksek fiyat/hizmet hassasiyeti taşır."))
+        drivers.append(("risk", "Fiber İnternet Paketi", "Veri setinde %41,9 churn oranı ile yüksek fiyat/memnuniyet hassasiyeti."))
     if row["PaymentMethod"] == "Electronic check":
-        drivers.append(("⚠️ Risk", "Elektronik çek ile ödeme — %45,3 churn oranı ile otomatik ödemeye (%15,2) göre 3 kat risklidir."))
+        drivers.append(("risk", "Elektronik Çek Ödemesi", "%45,3 churn oranı ile otomatik ödemeye (%15,2) göre 3 kat riskli."))
     elif "automatic" in row["PaymentMethod"]:
-        drivers.append(("✅ Koruyucu", "Otomatik ödeme talimatı — abonelik devamlılığını destekleyen güçlü bir koruyucu sinyaldir."))
+        drivers.append(("safe", "Otomatik Ödeme Talimatı", "Abonelik devamlılığını koruyan güçlü bir ödeme sinyali."))
 
     if row["TechSupport"] == "No" and row["InternetService"] != "No":
-        drivers.append(("⚠️ Risk", "Teknik destek paketi yok — destek almayan abonelerde churn oranı %41,6'dır."))
+        drivers.append(("risk", "Teknik Destek Yok", "Destek paketi olmayan abonelerde churn oranı %41,6'dır."))
     if row["OnlineSecurity"] == "No" and row["InternetService"] != "No":
-        drivers.append(("⚠️ Risk", "Çevrimiçi güvenlik paketi yok — güvenlik eklentisi olmayanlarda churn oranı %41,8'dir."))
+        drivers.append(("risk", "Çevrimiçi Güvenlik Yok", "Güvenlik eklentisi olmayanlarda churn oranı %41,8'dir."))
 
     if not drivers:
-        drivers.append(("ℹ️ Özet", "Müşteri profili dengeli risk sinyalleri göstermektedir."))
+        drivers.append(("safe", "Dengeli Müşteri Profili", "Belirgin bir yüksek risk sinyali tespit edilmedi."))
     return drivers
 
 
 # ==========================================================
-# DEMO PRESETS FOR 1-CLICK LIVE PRESENTATION
+# 1-CLICK DEMO PRESETS
 # ==========================================================
 PRESETS = {
     "high": {
@@ -363,11 +407,11 @@ if "preset_data" not in st.session_state:
     st.session_state["preset_data"] = PRESETS["high"].copy()
 
 # ==========================================================
-# SIDEBAR — QUICK DEMO PRESETS & PROJECT INFO
+# SIDEBAR
 # ==========================================================
 with st.sidebar:
-    st.markdown("### ⚡ Hızlı Demo Senaryoları")
-    st.caption("Sunum sırasında tek tıkla farklı müşteri profillerini yükleyebilirsiniz:")
+    st.markdown("### ⚡ Canlı Demo Senaryoları")
+    st.caption("Sunum sırasında tek tıkla farklı müşteri profillerini yükleyin:")
     if st.button("🔴 Yüksek Riskli Müşteri", use_container_width=True):
         st.session_state["preset_data"] = PRESETS["high"].copy()
     if st.button("🟠 Orta Riskli Müşteri", use_container_width=True):
@@ -379,22 +423,19 @@ with st.sidebar:
     st.markdown("### 📌 Proje Künyesi")
     st.markdown(
         "- **Geliştirici:** Arda KİLİT\n"
-        "- **Program:** BTK Uçtan Uca ML\n"
+        "- **Atölye:** BTK Uçtan Uca ML\n"
         "- **Veri Seti:** IBM Telco (7.043 kayıt)\n"
-        "- **Model:** CatBoost (Tuned)\n"
-        "- **Kod:** [GitHub Deposu](https://github.com/Arda-Kilit/telco-churn-ml-project)"
+        "- **Şampiyon:** CatBoost (Tuned)\n"
+        "- **GitHub:** [telco-churn-ml-project](https://github.com/Arda-Kilit/telco-churn-ml-project)"
     )
 
 # ==========================================================
-# HERO HEADER & KPI STRIP
+# LOAD ARTIFACTS & HERO HEADER
 # ==========================================================
 model, meta, metrics = load_artifacts()
 
 if model is None:
-    st.error(
-        "Model veya veri dosyası bulunamadı. Lütfen `models/best_model.joblib` veya "
-        "`data/WA_Fn-UseC_-Telco-Customer-Churn.csv` dosyasının repoda olduğundan emin olun."
-    )
+    st.error("Model veya veri dosyası bulunamadı. Lütfen repo dosyalarını kontrol edin.")
     st.stop()
 
 threshold = float(meta.get("optimal_threshold", 0.53))
@@ -405,12 +446,12 @@ test_rec = float(meta.get("test_recall", 0.7616))
 
 st.markdown(
     """
-    <div class="hero-banner">
-        <div class="hero-kicker">BTK Uçtan Uca Makine Öğrenmesi Projesi · Arda KİLİT</div>
-        <div class="hero-title">📡 Telekom Müşteri Kaybı (Churn) Karar Destek Sistemi</div>
-        <div class="hero-sub">
-            Sızıntısız Pipeline, 8 alan özniteliği ve 7 güçlü algoritmanın bilimsel karşılaştırmasıyla
-            müşteri kaybını erken tespit eden ve tutundurma aksiyonu öneren etkileşimli analitik platform.
+    <div class="hero-wrap">
+        <div class="hero-pill">BTK Uçtan Uca Makine Öğrenmesi · Arda KİLİT</div>
+        <div class="hero-title">📡 Telekom Müşteri Kaybı (Churn) Karar Destek Platformu</div>
+        <div class="hero-desc">
+            Sızıntısız Pipeline, 8 alan özniteliği ve 7 güçlü algoritmanın adil karşılaştırmasıyla
+            müşteri kaybını erken yakalayan ve gerçek zamanlı tutundurma simülasyonu sunan yapay zekâ uygulaması.
         </div>
     </div>
     """,
@@ -420,24 +461,24 @@ st.markdown(
 st.markdown(
     f"""
     <div class="kpi-grid">
-        <div class="kpi-card accent">
-            <div class="kpi-label">Şampiyon Model</div>
-            <div class="kpi-value">{champ_name}</div>
-            <div class="kpi-sub">7 güçlü algoritma arasından seçildi</div>
+        <div class="kpi-box coral">
+            <div class="kpi-lbl">Şampiyon Model</div>
+            <div class="kpi-val">{champ_name}</div>
+            <div class="kpi-sub">7 güçlü algoritma arasından lider</div>
         </div>
-        <div class="kpi-card">
-            <div class="kpi-label">Kilitli Test PR-AUC</div>
-            <div class="kpi-value">{test_pr:.4f}</div>
+        <div class="kpi-box">
+            <div class="kpi-lbl">Kilitli Test PR-AUC</div>
+            <div class="kpi-val">{test_pr:.4f}</div>
             <div class="kpi-sub">Dummy Baseline'a göre 2,55× artış</div>
         </div>
-        <div class="kpi-card">
-            <div class="kpi-label">Kilitli Test ROC-AUC</div>
-            <div class="kpi-value">{test_roc:.4f}</div>
+        <div class="kpi-box sky">
+            <div class="kpi-lbl">Kilitli Test ROC-AUC</div>
+            <div class="kpi-val">{test_roc:.4f}</div>
             <div class="kpi-sub">n = 1.057 kilitli test müşterisi</div>
         </div>
-        <div class="kpi-card">
-            <div class="kpi-label">Churn Yakalama (Recall)</div>
-            <div class="kpi-value">%{test_rec * 100:.1f}</div>
+        <div class="kpi-box">
+            <div class="kpi-lbl">Churn Yakalama (Recall)</div>
+            <div class="kpi-val">%{test_rec * 100:.1f}</div>
             <div class="kpi-sub">Optimize karar eşiği: {threshold:.2f}</div>
         </div>
     </div>
@@ -445,21 +486,22 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-tab1, tab2, tab3 = st.tabs(
+tab1, tab2, tab3, tab4 = st.tabs(
     [
-        "🎯 Tekil Risk Analizi & What-If",
+        "🎯 Risk Analizi & What-If",
         "📂 Toplu CSV Skorlama",
-        "📊 Model Karşılaştırması & EDA",
+        "🏆 Model Karşılaştırması",
+        "📈 EDA & Hata Analizi",
     ]
 )
 
 # ==========================================================
-# TAB 1: SINGLE CUSTOMER PREDICTION & WHAT-IF
+# TAB 1: SINGLE RISK ANALYSIS + LIVE WHAT-IF RETENTION SIMULATOR
 # ==========================================================
 with tab1:
     p = st.session_state["preset_data"]
-    st.markdown("#### Müşteri Profili ve What-If Simülatörü")
-    st.caption("Sol menüden hazır senaryo seçebilir veya aşağıdan özellikleri değiştirerek anlık churn riskini görebilirsiniz.")
+    st.markdown("#### Müşteri Profili ve Canlı Tutundurma Simülatörü")
+    st.caption("Sol menüden hazır profil seçin veya aşağıdaki alanları güncelleyip CatBoost tahminini görün.")
 
     with st.form("churn_form"):
         col_a, col_b, col_c = st.columns(3, gap="medium")
@@ -520,61 +562,96 @@ with tab1:
             stream_tv = st.selectbox("Streaming TV", addon_opts, index=_idx(p["stream_tv"]))
             stream_mov = st.selectbox("Streaming Movies", addon_opts, index=_idx(p["stream_mov"]))
 
-        submitted = st.form_submit_button("🔍 Churn Riskini Hesapla", use_container_width=True, type="primary")
+        submitted = st.form_submit_button("🔍 Churn Riskini ve Tutundurma Etkisini Hesapla", use_container_width=True, type="primary")
 
     if submitted:
-        if tenure > 0 and total == 0:
-            st.info("Not: Abonelik süresi 0'dan büyükken toplam ücret 0 girildi; tahmin bu girdiye göre hesaplandı.")
-
         customer_dict = {
-            "gender": gender,
-            "SeniorCitizen": senior,
-            "Partner": partner,
-            "Dependents": dependents,
-            "tenure": tenure,
-            "PhoneService": phone,
-            "MultipleLines": multi_lines,
-            "InternetService": internet,
-            "OnlineSecurity": online_sec,
-            "OnlineBackup": online_bak,
-            "DeviceProtection": dev_prot,
-            "TechSupport": tech_sup,
-            "StreamingTV": stream_tv,
-            "StreamingMovies": stream_mov,
-            "Contract": contract,
-            "PaperlessBilling": paperless,
-            "PaymentMethod": payment,
-            "MonthlyCharges": monthly,
-            "TotalCharges": total,
+            "gender": gender, "SeniorCitizen": senior, "Partner": partner, "Dependents": dependents,
+            "tenure": tenure, "PhoneService": phone, "MultipleLines": multi_lines,
+            "InternetService": internet, "OnlineSecurity": online_sec, "OnlineBackup": online_bak,
+            "DeviceProtection": dev_prot, "TechSupport": tech_sup, "StreamingTV": stream_tv,
+            "StreamingMovies": stream_mov, "Contract": contract, "PaperlessBilling": paperless,
+            "PaymentMethod": payment, "MonthlyCharges": monthly, "TotalCharges": total,
         }
         input_df = pd.DataFrame([customer_dict])
         prob = float(model.predict_proba(input_df)[0, 1])
         pred_label = "AYRILMA RİSKİ VAR (Churn = Yes)" if prob >= threshold else "KALMA EĞİLİMİNDE (Churn = No)"
-        band, icon, card_cls, pill_cls, advice = get_risk_profile(prob, threshold)
+        band, icon, pill_cls, gauge_col, advice = get_risk_profile(prob, threshold)
 
-        st.markdown(
-            f"""
-            <div class="result-card {card_cls}">
-                <span class="badge-pill {pill_cls}">{icon} {band.upper()}</span>
-                <div style="display:flex; flex-wrap:wrap; align-items:baseline; gap:24px; margin-bottom:10px;">
-                    <div style="font-size:2.4rem; font-weight:800; line-height:1;">%{prob * 100:.1f}</div>
-                    <div style="font-size:1.05rem; font-weight:700;">{pred_label}</div>
-                </div>
-                <div style="font-size:0.93rem; opacity:0.92;">
-                    <strong>Önerilen CRM Aksiyonu:</strong> {advice}
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-        st.progress(min(max(prob, 0.0), 1.0))
-
-        st.markdown("##### Bu Müşteri İçin Öne Çıkan Risk ve Koruma Sinyalleri")
-        for tag, text in explain_customer_drivers(customer_dict):
+        res_left, res_right = st.columns([1.05, 1.45], gap="large")
+        with res_left:
             st.markdown(
-                f'<div class="driver-item"><strong>{tag}:</strong> {text}</div>',
+                f"""
+                <div class="panel-card" style="text-align:center;">
+                    <span class="badge-status {pill_cls}">{icon} {band}</span>
+                    {render_svg_gauge(prob, threshold, gauge_col)}
+                    <div style="font-size:1.02rem; font-weight:700; margin-top:4px;">{pred_label}</div>
+                </div>
+                """,
                 unsafe_allow_html=True,
             )
+
+        with res_right:
+            st.markdown(
+                f"""
+                <div class="panel-card">
+                    <div style="font-size:0.82rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#5EEAD4; margin-bottom:6px;">
+                        Önerilen CRM Aksiyonu
+                    </div>
+                    <div style="font-size:1.0rem; line-height:1.5; margin-bottom:14px;">{advice}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+            # Live What-If Retention Simulation using the REAL CatBoost model
+            sim_dict = customer_dict.copy()
+            sim_actions = []
+            if sim_dict["Contract"] == "Month-to-month":
+                sim_dict["Contract"] = "One year"
+                sim_actions.append("1 Yıllık Sözleşmeye Geçiş")
+            if sim_dict["PaymentMethod"] == "Electronic check":
+                sim_dict["PaymentMethod"] = "Credit card (automatic)"
+                sim_actions.append("Otomatik Ödeme Talimatı")
+            if sim_dict["InternetService"] != "No" and sim_dict["TechSupport"] == "No":
+                sim_dict["TechSupport"] = "Yes"
+                sim_actions.append("Teknik Destek Paketi")
+            if sim_dict["InternetService"] != "No" and sim_dict["OnlineSecurity"] == "No":
+                sim_dict["OnlineSecurity"] = "Yes"
+                sim_actions.append("Çevrimiçi Güvenlik")
+
+            if sim_actions:
+                sim_prob = float(model.predict_proba(pd.DataFrame([sim_dict]))[0, 1])
+                delta_pp = (prob - sim_prob) * 100
+                st.markdown(
+                    f"""
+                    <div class="sim-card">
+                        <div style="font-size:0.80rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#5EEAD4; margin-bottom:6px;">
+                            💡 Canlı What-If Tutundurma Simülasyonu (Gerçek Model Çıktısı)
+                        </div>
+                        <div style="font-size:0.90rem; margin-bottom:8px;">
+                            <strong>Uygulanan Teklif:</strong> {", ".join(sim_actions)}
+                        </div>
+                        <div style="display:flex; gap:24px; align-items:baseline; flex-wrap:wrap;">
+                            <div><span style="opacity:0.75;">Mevcut Risk:</span> <strong>%{prob*100:.1f}</strong></div>
+                            <div><span style="opacity:0.75;">Teklif Sonrası:</span> <strong style="color:#5EEAD4;">%{sim_prob*100:.1f}</strong></div>
+                            <div><span style="opacity:0.75;">Net Risk Azalışı:</span> <strong style="color:#34D399;">-{delta_pp:.1f} puan</strong></div>
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+        st.markdown("##### Müşteri Bazlı Risk ve Koruma Sinyalleri")
+        d_cols = st.columns(2, gap="medium")
+        drivers = explain_customer_drivers(customer_dict)
+        for idx, (kind, title, desc) in enumerate(drivers):
+            icon_d = "⚠️" if kind == "risk" else "✅"
+            with d_cols[idx % 2]:
+                st.markdown(
+                    f'<div class="driver-chip {kind}"><strong>{icon_d} {title}:</strong> {desc}</div>',
+                    unsafe_allow_html=True,
+                )
 
 # ==========================================================
 # TAB 2: BATCH CSV PREDICTION
@@ -582,8 +659,8 @@ with tab1:
 with tab2:
     st.markdown("#### Toplu Müşteri Risk Skorlama (CSV)")
     st.caption(
-        "Telco şemasına uygun bir CSV dosyası yükleyin; sistem her müşteri için olasılık, "
-        "risk segmenti ve tutundurma önceliği hesaplayıp indirilebilir rapor üretir."
+        "Telco şemasına uygun bir CSV dosyası yükleyin; sistem her müşteri için olasılık "
+        "ve risk segmenti hesaplayıp indirilebilir CRM listesi üretir."
     )
     uploaded = st.file_uploader("Müşteri listesi (.csv) yükleyin", type=["csv"])
     if uploaded is not None:
@@ -624,81 +701,71 @@ with tab2:
                     type="primary",
                 )
         except Exception as exc:
-            st.error(f"CSV işlenirken beklenmeyen bir hata oluştu: {exc}")
+            st.error(f"CSV işlenirken hata oluştu: {exc}")
 
 # ==========================================================
-# TAB 3: MODEL COMPARISON & EDA GALLERY
+# TAB 3: MODEL COMPARISON & TUNING
 # ==========================================================
 with tab3:
-    st.markdown("#### Bilimsel Model Karşılaştırması (Baseline + 6 Güçlü Rakip)")
+    st.markdown("#### Kilitli Test Seti Model Karşılaştırması (Baseline + 6 Güçlü Rakip)")
     if metrics is not None:
         test_tbl = pd.DataFrame(metrics["test_comparison_all_models"])[
             [
-                "model",
-                "test_pr_auc",
-                "test_roc_auc",
-                "test_f1_at_opt",
-                "test_recall_at_opt",
-                "test_precision_at_opt",
-                "test_accuracy_at_opt",
-                "threshold_used",
+                "model", "test_pr_auc", "test_roc_auc", "test_f1_at_opt",
+                "test_recall_at_opt", "test_precision_at_opt", "test_accuracy_at_opt", "threshold_used",
             ]
         ].rename(
             columns={
-                "model": "Model",
-                "test_pr_auc": "Test PR-AUC",
-                "test_roc_auc": "Test ROC-AUC",
-                "test_f1_at_opt": "Test F1",
-                "test_recall_at_opt": "Recall",
-                "test_precision_at_opt": "Precision",
-                "test_accuracy_at_opt": "Accuracy",
+                "model": "Model", "test_pr_auc": "Test PR-AUC", "test_roc_auc": "Test ROC-AUC",
+                "test_f1_at_opt": "Test F1", "test_recall_at_opt": "Recall",
+                "test_precision_at_opt": "Precision", "test_accuracy_at_opt": "Accuracy",
                 "threshold_used": "Eşik",
             }
         )
-        st.dataframe(
-            test_tbl.style.format(
-                {
-                    "Test PR-AUC": "{:.4f}",
-                    "Test ROC-AUC": "{:.4f}",
-                    "Test F1": "{:.4f}",
-                    "Recall": "{:.4f}",
-                    "Precision": "{:.4f}",
-                    "Accuracy": "{:.4f}",
-                    "Eşik": "{:.2f}",
-                }
-            ),
-            use_container_width=True,
-            hide_index=True,
-        )
+        c_chart, c_tbl = st.columns([1.0, 1.35], gap="large")
+        with c_chart:
+            st.markdown("##### Test PR-AUC Karşılaştırması")
+            chart_df = test_tbl.set_index("Model")[["Test PR-AUC", "Test ROC-AUC"]]
+            st.bar_chart(chart_df, height=340)
+        with c_tbl:
+            st.markdown("##### Detaylı Performans Tablosu (n = 1.057)")
+            st.dataframe(
+                test_tbl.style.format(
+                    {
+                        "Test PR-AUC": "{:.4f}", "Test ROC-AUC": "{:.4f}", "Test F1": "{:.4f}",
+                        "Recall": "{:.4f}", "Precision": "{:.4f}", "Accuracy": "{:.4f}", "Eşik": "{:.2f}",
+                    }
+                ),
+                use_container_width=True,
+                hide_index=True,
+            )
 
-        st.markdown("##### Hiperparametre Optimizasyonu Öncesi / Sonrası (5-Fold CV PR-AUC)")
+        st.markdown("##### Eşit Bütçeli Hiperparametre Optimizasyonu (Önce vs. Sonra)")
         tune_tbl = pd.DataFrame(metrics["tuning_comparison"])[
             ["model", "cv_pr_auc_before", "cv_pr_auc_after", "delta_pr_auc", "val_pr_auc", "optimal_threshold"]
         ].rename(
             columns={
-                "model": "Aday Model",
-                "cv_pr_auc_before": "Önce CV PR-AUC",
-                "cv_pr_auc_after": "Sonra CV PR-AUC",
-                "delta_pr_auc": "Artış (Δ)",
-                "val_pr_auc": "Validation PR-AUC",
-                "optimal_threshold": "Optimal Eşik",
+                "model": "Aday Model", "cv_pr_auc_before": "Önce CV PR-AUC",
+                "cv_pr_auc_after": "Sonra CV PR-AUC", "delta_pr_auc": "Artış (Δ)",
+                "val_pr_auc": "Validation PR-AUC", "optimal_threshold": "Optimal Eşik",
             }
         )
         st.dataframe(
             tune_tbl.style.format(
                 {
-                    "Önce CV PR-AUC": "{:.4f}",
-                    "Sonra CV PR-AUC": "{:.4f}",
-                    "Artış (Δ)": "+{:.4f}",
-                    "Validation PR-AUC": "{:.4f}",
-                    "Optimal Eşik": "{:.2f}",
+                    "Önce CV PR-AUC": "{:.4f}", "Sonra CV PR-AUC": "{:.4f}",
+                    "Artış (Δ)": "+{:.4f}", "Validation PR-AUC": "{:.4f}", "Optimal Eşik": "{:.2f}",
                 }
             ),
             use_container_width=True,
             hide_index=True,
         )
 
-    st.markdown("#### Keşifsel Veri Analizi (EDA) ve Değerlendirme Grafikleri")
+# ==========================================================
+# TAB 4: EDA & ERROR ANALYSIS GALLERY
+# ==========================================================
+with tab4:
+    st.markdown("#### Keşifsel Veri Analizi (EDA), Değerlendirme ve Hata Analizi Grafikleri")
     fig_files = [
         ("fig1_eda_target_and_numeric.png", "Şekil 1: Hedef Dağılımı ve Sayısal Özellikler"),
         ("fig2_eda_categorical_churn.png", "Şekil 2: Kategorik Değişkenlere Göre Churn Oranları"),
@@ -717,15 +784,15 @@ with tab3:
                 st.image(fpath, caption=caption, use_container_width=True)
 
 # ==========================================================
-# RESPONSIBLE USE & MODEL LIMITATIONS FOOTER (YÖNERGE BÖLÜM 11)
+# RESPONSIBLE USE FOOTER
 # ==========================================================
 st.markdown(
     """
-    <div class="disclaimer-box">
+    <div class="disclaimer-card">
         <strong>⚠️ Model Sınırlılığı ve Sorumlu Kullanım Notu:</strong>
-        Bu uygulama, IBM Telco Customer Churn kesit veri seti üzerinde eğitilmiş olasılıksal bir tahmin modeli sunar;
+        Bu platform, IBM Telco Customer Churn kesit veri setiyle eğitilmiş olasılıksal bir tahmin modeli sunar;
         kesin sonuç garanti etmez ve yanlış pozitif (FP) veya yanlış negatif (FN) tahminler içerebilir.
-        Model çıktıları, iş kararlarında tek başına değil, müşteri ilişkileri uzman değerlendirmesiyle birlikte kullanılmalıdır.
+        Çıktılar, iş kararlarında tek başına değil, müşteri ilişkileri uzman değerlendirmesiyle birlikte kullanılmalıdır.
     </div>
     """,
     unsafe_allow_html=True,
