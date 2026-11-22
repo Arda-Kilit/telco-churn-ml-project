@@ -67,13 +67,14 @@ Telco_Churn_BTK_Proje/
 ## 7. Akademik Dürüstlük ve Şeffaflık Notu
 Tüm veri analizi, model metrikleri ve grafikler doğrudan gerçek deney çıktılarından üretilir. Kod mimarisi ve dokümantasyon sürecinde yapay zekâ asistanından destek alınmış, tüm kod ve deney çıktıları proje sahibi tarafından doğrulanmıştır.
 
-
+## Canlı Streamlit.io Linki
+https://telco-churn-ml-project-b7udaruudkcdjrrtxfcqlm.streamlit.app
 
 ## Gerekli PDF ve PowerPoint Sunumu
 -----------------------------------
 ## PowerPoint Sunumu > 
 https://docs.google.com/presentation/d/19lERB4_sPYBGRhFZI21RNkTnhLv5m5OK/edit?usp=drive_link&ouid=114680489079357240033&rtpof=true&sd=true
-
+===================================
 ## PDF > 
 https://drive.google.com/file/d/1MxTAoGgymvCmZcKLTGDbjXO1fn4zeD6t/view?usp=drive_link
 
