@@ -86,11 +86,11 @@ st.markdown(
             border-right: 1px solid var(--border-subtle);
         }
         .block-container {
-            padding: 1.5rem 2.2rem 3rem 2.2rem;
+            padding: 4.25rem 2.2rem 3rem 2.2rem;
             max-width: 1460px;
         }
         @media (max-width: 900px) {
-            .block-container { padding: 1rem 1rem 2.2rem 1rem; }
+            .block-container { padding: 3.75rem 1rem 2.2rem 1rem; }
         }
 
         /* Spacious Top Navigation Bar */
