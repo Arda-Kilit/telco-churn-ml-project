@@ -1,6 +1,6 @@
 """
-BTK Uçtan Uca Makine Öğrenmesi Projesi — Telco Customer Churn
-Aşama 13–14: Özgün Editorial-Graphite & Canlı Tutundurma Stüdyosu (Streamlit)
+AboneRadar — BTK Uçtan Uca Makine Öğrenmesi Projesi (Telco Customer Churn)
+Aşama 13–14: Canlı Risk & Tutundurma Stüdyosu (Streamlit)
 
 Çalıştırma:
     streamlit run app.py
@@ -25,8 +25,8 @@ from src.features import (
 )
 
 st.set_page_config(
-    page_title="Telco Churn Intelligence | Arda KİLİT",
-    page_icon="◈",
+    page_title="AboneRadar | Telekom Churn Karar Destek Sistemi",
+    page_icon="◎",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -45,8 +45,8 @@ def _html(raw: str) -> str:
 
 
 # ==========================================================
-# REFINED CARBON & COOL SLATE DESIGN SYSTEM (LINEAR / APPLE-PRO AESTHETIC)
-# 90% calm matte neutral surfaces + surgical blue UI accent + semantic risk colors
+# ABONERADAR DESIGN SYSTEM — CARBON & COOL SLATE (LINEAR / APPLE-PRO)
+# Calm matte neutral surfaces + surgical blue UI accent + semantic risk colors
 # ==========================================================
 st.markdown(
     _html(
@@ -59,8 +59,10 @@ st.markdown(
             --bg-card: #11161F;
             --bg-elevated: #161C27;
             --border-subtle: rgba(226, 232, 240, 0.09);
-            --border-accent: rgba(96, 165, 250, 0.34);
+            --border-strong: rgba(226, 232, 240, 0.15);
+            --border-accent: rgba(96, 165, 250, 0.36);
             --ink-primary: #F8FAFC;
+            --ink-secondary: #CBD5E1;
             --ink-muted: #94A3B8;
             --ui-accent: #60A5FA;
             --ui-primary: #3B82F6;
@@ -75,62 +77,93 @@ st.markdown(
         }
         .stApp { background-color: var(--bg-canvas); }
         [data-testid="stHeader"] {
-            background: rgba(9, 12, 16, 0.86);
+            background: rgba(9, 12, 16, 0.85);
             backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.05);
         }
         [data-testid="stSidebar"] {
             background-color: #0D1117;
             border-right: 1px solid var(--border-subtle);
         }
         .block-container {
-            padding-top: 1.35rem;
-            padding-bottom: 2.6rem;
-            max-width: 1260px;
+            padding: 1.5rem 2.2rem 3rem 2.2rem;
+            max-width: 1460px;
+        }
+        @media (max-width: 900px) {
+            .block-container { padding: 1rem 1rem 2.2rem 1rem; }
         }
 
-        /* Executive Masthead */
-        .masthead {
-            background: radial-gradient(circle at 92% 10%, rgba(59, 130, 246, 0.14), transparent 38%),
-                        linear-gradient(180deg, #131924 0%, #0E131B 100%);
-            border: 1px solid var(--border-subtle);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 12px 28px rgba(0, 0, 0, 0.28);
-            border-radius: 16px;
-            padding: 24px 30px;
-            margin-bottom: 1.15rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .masthead::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, transparent 0%, #3B82F6 35%, #10B981 70%, transparent 100%);
-        }
-        .mh-top {
+        /* Spacious Top Navigation Bar */
+        .top-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 14px;
+            background: rgba(17, 22, 31, 0.92);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 14px 24px;
+            margin-bottom: 1rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
-        .mh-kicker {
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--ui-accent);
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+        .nav-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.22) 0%, rgba(16, 185, 129, 0.14) 100%);
+            border: 1px solid rgba(96, 165, 250, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .nav-wordmark {
+            font-size: 1.18rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            color: #F8FAFC;
+            line-height: 1.1;
+        }
+        .nav-wordmark span { color: var(--ui-accent); }
+        .nav-tagline {
+            font-size: 0.76rem;
+            color: var(--ink-muted);
+            margin-top: 2px;
+        }
+        .nav-pills {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .nav-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: var(--ink-secondary);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            padding: 6px 13px;
+            border-radius: 999px;
         }
         .live-badge {
             display: inline-flex;
             align-items: center;
             gap: 7px;
-            font-size: 0.74rem;
+            font-size: 0.76rem;
             font-weight: 600;
             color: #A7F3D0;
-            background: rgba(16, 185, 129, 0.10);
-            border: 1px solid rgba(16, 185, 129, 0.28);
-            padding: 4px 12px;
+            background: rgba(16, 185, 129, 0.11);
+            border: 1px solid rgba(16, 185, 129, 0.30);
+            padding: 6px 14px;
             border-radius: 999px;
         }
         .live-dot {
@@ -138,28 +171,82 @@ st.markdown(
             background: #10B981;
             box-shadow: 0 0 8px #10B981;
         }
+
+        /* Executive Hero Masthead */
+        .masthead {
+            background: radial-gradient(circle at 90% 15%, rgba(59, 130, 246, 0.15), transparent 40%),
+                        linear-gradient(180deg, #131924 0%, #0E131B 100%);
+            border: 1px solid var(--border-subtle);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 14px 32px rgba(0, 0, 0, 0.28);
+            border-radius: 18px;
+            padding: 28px 34px;
+            margin-bottom: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .masthead::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #3B82F6 32%, #10B981 68%, transparent 100%);
+        }
+        .mh-grid {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+        .mh-left { flex: 1 1 560px; }
+        .mh-kicker {
+            font-size: 0.73rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--ui-accent);
+            margin-bottom: 8px;
+        }
         .mh-title {
-            font-size: 1.88rem;
+            font-size: 2.02rem;
             font-weight: 800;
             color: #F8FAFC;
-            margin: 0 0 6px 0;
-            line-height: 1.2;
-            letter-spacing: -0.025em;
+            margin: 0 0 10px 0;
+            line-height: 1.18;
+            letter-spacing: -0.03em;
         }
         .mh-sub {
-            font-size: 0.91rem;
+            font-size: 0.93rem;
             color: var(--ink-muted);
             margin: 0;
-            max-width: 800px;
-            line-height: 1.5;
+            max-width: 780px;
+            line-height: 1.58;
         }
+        .mh-right {
+            flex: 0 0 auto;
+            min-width: 245px;
+            background: rgba(9, 12, 16, 0.56);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 15px 18px;
+        }
+        .mh-stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.81rem;
+            color: var(--ink-muted);
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.06);
+        }
+        .mh-stat-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .mh-stat-row strong { color: var(--ink-primary); font-variant-numeric: tabular-nums; }
 
         /* Clean KPI Strip */
         .kpi-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 14px;
-            margin-bottom: 1.35rem;
+            margin-bottom: 1.45rem;
         }
         @media (max-width: 900px) {
             .kpi-row { grid-template-columns: repeat(2, 1fr); }
@@ -169,11 +256,16 @@ st.markdown(
             border: 1px solid var(--border-subtle);
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
             border-radius: 14px;
-            padding: 15px 18px;
+            padding: 16px 20px;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+        .kpi-tile:hover {
+            border-color: var(--border-strong);
+            transform: translateY(-1px);
         }
         .kpi-tile.featured {
             border-color: var(--border-accent);
-            background: linear-gradient(180deg, rgba(59, 130, 246, 0.10) 0%, #11161F 100%);
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.11) 0%, #11161F 100%);
         }
         .kpi-kicker {
             font-size: 0.69rem;
@@ -181,19 +273,19 @@ st.markdown(
             letter-spacing: 0.09em;
             text-transform: uppercase;
             color: var(--ink-muted);
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
         .kpi-num {
-            font-size: 1.70rem;
+            font-size: 1.74rem;
             font-weight: 800;
             color: var(--ink-primary);
             line-height: 1.12;
             letter-spacing: -0.02em;
             font-variant-numeric: tabular-nums;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
         }
         .kpi-tile.featured .kpi-num { color: var(--ui-accent); }
-        .kpi-meta { font-size: 0.77rem; color: var(--ink-muted); }
+        .kpi-meta { font-size: 0.78rem; color: var(--ink-muted); }
 
         /* Workspace Studio Typography */
         .studio-label {
@@ -205,16 +297,16 @@ st.markdown(
             margin-bottom: 4px;
         }
         .sec-head {
-            font-size: 1.22rem;
+            font-size: 1.24rem;
             font-weight: 700;
             letter-spacing: -0.015em;
             color: var(--ink-primary);
             margin: 0 0 0.22rem 0;
         }
         .sec-sub {
-            font-size: 0.85rem;
+            font-size: 0.86rem;
             color: var(--ink-muted);
-            margin-bottom: 0.9rem;
+            margin-bottom: 0.95rem;
         }
 
         .dossier-card {
@@ -222,14 +314,14 @@ st.markdown(
             border: 1px solid var(--border-subtle);
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
             border-radius: 16px;
-            padding: 20px 22px;
+            padding: 22px 24px;
             margin-bottom: 14px;
         }
         .status-tag {
             display: inline-block;
-            padding: 4px 13px;
+            padding: 5px 14px;
             border-radius: 999px;
-            font-size: 0.71rem;
+            font-size: 0.72rem;
             font-weight: 700;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -244,7 +336,7 @@ st.markdown(
             background: linear-gradient(145deg, rgba(16, 185, 129, 0.08) 0%, rgba(59, 130, 246, 0.06) 100%);
             border: 1px solid rgba(16, 185, 129, 0.28);
             border-radius: 16px;
-            padding: 18px 20px;
+            padding: 18px 22px;
             margin-top: 10px;
             margin-bottom: 14px;
         }
@@ -321,10 +413,10 @@ st.markdown(
             border: 1px solid var(--border-subtle);
             border-top: 2px solid var(--ui-primary);
             border-radius: 12px;
-            padding: 16px 18px;
+            padding: 17px 20px;
             font-size: 0.86rem;
-            line-height: 1.55;
-            color: #CBD5E1;
+            line-height: 1.56;
+            color: var(--ink-secondary);
         }
         .mc-lbl {
             font-size: 0.70rem;
@@ -337,16 +429,17 @@ st.markdown(
 
         /* Tabs & Buttons */
         .stTabs [data-baseweb="tab-list"] {
-            gap: 6px;
+            gap: 8px;
             border-bottom: 1px solid var(--border-subtle);
-            padding-bottom: 2px;
+            padding-bottom: 4px;
+            margin-bottom: 0.75rem;
         }
         .stTabs [data-baseweb="tab"] {
             background: transparent;
-            border-radius: 8px 8px 0 0;
-            padding: 10px 18px;
+            border-radius: 10px 10px 0 0;
+            padding: 11px 20px;
             font-weight: 600;
-            font-size: 0.87rem;
+            font-size: 0.89rem;
             color: var(--ink-muted);
         }
         .stTabs [aria-selected="true"] {
@@ -360,18 +453,18 @@ st.markdown(
             border: none;
             font-weight: 600;
             border-radius: 10px;
-            padding: 0.60rem 1.15rem;
+            padding: 0.62rem 1.2rem;
         }
         div.stButton > button[kind="primary"]:hover { filter: brightness(1.08); }
 
         .footer-note {
-            margin-top: 2rem;
-            padding: 14px 18px;
+            margin-top: 2.2rem;
+            padding: 16px 20px;
             border-radius: 12px;
             background: rgba(226, 232, 240, 0.03);
             border: 1px solid var(--border-subtle);
-            font-size: 0.80rem;
-            line-height: 1.55;
+            font-size: 0.81rem;
+            line-height: 1.56;
             color: var(--ink-muted);
         }
         </style>
@@ -462,25 +555,25 @@ def get_risk_profile(prob: float, threshold: float):
         return (
             "Yüksek Risk",
             "tag-high",
-            "#FB7185",
+            "#F43F5E",
             "Acil tutundurma müdahalesi: 1 yıllık taahhüt indirimi ve 3 ay ücretsiz Teknik Destek paketi sunun.",
         )
     if prob >= threshold * 0.70:
         return (
             "Orta Risk",
             "tag-mid",
-            "#FBBF24",
+            "#F59E0B",
             "Proaktif iletişim: Otomatik ödeme indirimi ve Çevrimiçi Güvenlik eklentisiyle bağlılığı güçlendirin.",
         )
     return (
         "Düşük Risk",
         "tag-low",
-        "#34D399",
+        "#10B981",
         "Mevcut memnuniyeti koruyun; sadakat programı veya ek paket çapraz satış kampanyalarına dahil edin.",
     )
 
 
-def render_editorial_dial(prob: float, threshold: float, color: str) -> str:
+def render_radar_dial(prob: float, threshold: float, color: str) -> str:
     pct = max(0.0, min(1.0, prob))
     r = 86
     circ = math.pi * r
@@ -495,12 +588,12 @@ def render_editorial_dial(prob: float, threshold: float, color: str) -> str:
 
     return (
         '<div style="display:flex; justify-content:center; align-items:center; padding:6px 0 2px 0;">'
-        '<svg viewBox="0 0 230 134" width="250" height="146" xmlns="http://www.w3.org/2000/svg">'
-        '<path d="M 29 108 A 86 86 0 0 1 201 108" fill="none" stroke="rgba(244,241,234,0.10)" stroke-width="14" stroke-linecap="round"/>'
+        '<svg viewBox="0 0 230 134" width="256" height="150" xmlns="http://www.w3.org/2000/svg">'
+        '<path d="M 29 108 A 86 86 0 0 1 201 108" fill="none" stroke="rgba(226,232,240,0.10)" stroke-width="14" stroke-linecap="round"/>'
         f'<path d="M 29 108 A 86 86 0 0 1 201 108" fill="none" stroke="{color}" stroke-width="14" stroke-linecap="round" stroke-dasharray="{filled:.1f} {empty:.1f}"/>'
         f'<line x1="{tx1:.1f}" y1="{ty1:.1f}" x2="{tx2:.1f}" y2="{ty2:.1f}" stroke="#60A5FA" stroke-width="2.6" stroke-linecap="round"/>'
-        f'<text x="115" y="90" text-anchor="middle" fill="#F8FAFC" font-size="33" font-weight="700" font-family="Inter, sans-serif">%{pct * 100:.1f}</text>'
-        f'<text x="115" y="116" text-anchor="middle" fill="#9CA3AF" font-size="10" font-weight="600" letter-spacing="0.08em" font-family="Plus Jakarta Sans, sans-serif">CHURN OLASILIĞI · EŞİK {threshold:.2f}</text>'
+        f'<text x="115" y="90" text-anchor="middle" fill="#F8FAFC" font-size="33" font-weight="800" font-family="Inter, sans-serif">%{pct * 100:.1f}</text>'
+        f'<text x="115" y="116" text-anchor="middle" fill="#94A3B8" font-size="10" font-weight="600" letter-spacing="0.08em" font-family="Inter, sans-serif">CHURN OLASILIĞI · EŞİK {threshold:.2f}</text>'
         "</svg></div>"
     )
 
@@ -587,17 +680,17 @@ if "active_threshold" not in st.session_state:
     st.session_state["active_threshold"] = round(default_thr, 2)
 
 # ==========================================================
-# SIDEBAR — CALM EXECUTIVE CONTROLS
+# SIDEBAR — ABONERADAR CONTROL PANEL
 # ==========================================================
 with st.sidebar:
     st.markdown(
         _html(
             """
-            <div style="padding:4px 0 12px 0; border-bottom:1px solid rgba(244,241,234,0.09); margin-bottom:14px;">
+            <div style="padding:4px 0 13px 0; border-bottom:1px solid rgba(226,232,240,0.09); margin-bottom:14px;">
                 <div style="font-size:0.70rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#60A5FA;">
-                    KONTROL PANELİ
+                    ABONERADAR · KONTROL
                 </div>
-                <div style="font-family:'Inter',sans-serif; font-size:1.25rem; font-weight:700; color:#F8FAFC; margin-top:2px;">
+                <div style="font-size:1.22rem; font-weight:800; color:#F8FAFC; margin-top:2px; letter-spacing:-0.02em;">
                     Canlı Demo Senaryoları
                 </div>
             </div>
@@ -605,7 +698,7 @@ with st.sidebar:
         ),
         unsafe_allow_html=True,
     )
-    st.caption("Seçtiğiniz profil anında yüklenir; tüm göstergeler ve What-If paneli canlı güncellenir.")
+    st.caption("Seçtiğiniz abone profili anında yüklenir; radar kadranı ve What-If paneli canlı güncellenir.")
     if st.button("Yüksek Risk Profili (Örnek 1)", use_container_width=True):
         _apply_preset("high")
     if st.button("Orta Risk Profili (Örnek 2)", use_container_width=True):
@@ -615,7 +708,7 @@ with st.sidebar:
 
     st.divider()
     st.markdown(
-        '<div style="font-size:0.72rem; font-weight:700; letter-spacing:0.10em; text-transform:uppercase; color:#60A5FA; margin-bottom:6px;">KARAR EŞİĞİ (THRESHOLD)</div>',
+        '<div style="font-size:0.71rem; font-weight:700; letter-spacing:0.10em; text-transform:uppercase; color:#60A5FA; margin-bottom:6px;">KARAR EŞİĞİ (THRESHOLD)</div>',
         unsafe_allow_html=True,
     )
     threshold = st.slider(
@@ -636,10 +729,11 @@ with st.sidebar:
     st.markdown(
         _html(
             """
-            <div style="font-size:0.72rem; font-weight:700; letter-spacing:0.10em; text-transform:uppercase; color:#60A5FA; margin-bottom:8px;">
+            <div style="font-size:0.71rem; font-weight:700; letter-spacing:0.10em; text-transform:uppercase; color:#60A5FA; margin-bottom:8px;">
                 PROJE KÜNYESİ
             </div>
-            <div style="font-size:0.84rem; line-height:1.7; color:#D1D5DB;">
+            <div style="font-size:0.84rem; line-height:1.72; color:#CBD5E1;">
+                <strong>Sistem:</strong> AboneRadar<br>
                 <strong>Geliştirici:</strong> Arda KİLİT<br>
                 <strong>Program:</strong> BTK Uçtan Uca ML<br>
                 <strong>Veri Seti:</strong> IBM Telco (7.043)<br>
@@ -652,20 +746,60 @@ with st.sidebar:
     )
 
 # ==========================================================
-# EDITORIAL MASTHEAD & KPI STRIP
+# TOP NAVBAR + EXECUTIVE HERO MASTHEAD (WIDE & SPACIOUS)
 # ==========================================================
+RADAR_ICON_SVG = (
+    '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">'
+    '<circle cx="12" cy="12" r="9" stroke="#60A5FA" stroke-width="1.8" stroke-opacity="0.45"/>'
+    '<circle cx="12" cy="12" r="5" stroke="#60A5FA" stroke-width="1.8" stroke-opacity="0.75"/>'
+    '<line x1="12" y1="12" x2="18.2" y2="5.8" stroke="#10B981" stroke-width="2" stroke-linecap="round"/>'
+    '<circle cx="12" cy="12" r="2.1" fill="#F8FAFC"/>'
+    "</svg>"
+)
+
 st.markdown(
     _html(
-        """
-        <div class="masthead">
-            <div class="mh-top">
-                <span class="mh-kicker">BTK Uçtan Uca Makine Öğrenmesi · Arda KİLİT</span>
-                <span class="live-badge"><span class="live-dot"></span>Canlı Model · CatBoost Tuned</span>
+        f"""
+        <div class="top-nav">
+            <div class="nav-brand">
+                <div class="nav-logo">{RADAR_ICON_SVG}</div>
+                <div>
+                    <div class="nav-wordmark">Abone<span>Radar</span></div>
+                    <div class="nav-tagline">Telekom Müşteri Kaybı Erken Uyarı &amp; Karar Destek Platformu</div>
+                </div>
             </div>
-            <div class="mh-title">Telekom Müşteri Kaybı Karar Destek Sistemi</div>
-            <div class="mh-sub">
-                Sızıntısız Pipeline mimarisi, 8 alan özniteliği ve 7 güçlü algoritmanın bilimsel karşılaştırmasıyla
-                müşteri kaybını gerçek zamanlı ölçen ve etkileşimli tutundurma stratejisi sunan analitik platform.
+            <div class="nav-pills">
+                <span class="nav-pill">BTK Uçtan Uca ML · Arda KİLİT</span>
+                <span class="nav-pill">Kilitli Test PR-AUC: {test_pr:.4f}</span>
+                <span class="live-badge"><span class="live-dot"></span>Canlı Model · {champ_name} Tuned</span>
+            </div>
+        </div>
+        """
+    ),
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    _html(
+        f"""
+        <div class="masthead">
+            <div class="mh-grid">
+                <div class="mh-left">
+                    <div class="mh-kicker">YAPAY ZEKÂ DESTEKLİ TUTUNDURMA RADARI</div>
+                    <div class="mh-title">AboneRadar ile Müşteri Kaybını Erkenden Yakalayın</div>
+                    <div class="mh-sub">
+                        <strong>AboneRadar</strong>, 7.043 abonelik IBM Telco veri seti üzerinde sızıntısız Pipeline mimarisi,
+                        8 alan özniteliği ve 7 güçlü algoritmanın bilimsel kıyaslamasıyla eğitilmiş şampiyon CatBoost modelini
+                        kullanarak ayrılma riskini gerçek zamanlı ölçer; etkileşimli What-If simülatörüyle en etkili tutundurma
+                        aksiyonunu saniyeler içinde önerir.
+                    </div>
+                </div>
+                <div class="mh-right">
+                    <div class="mh-stat-row"><span>Aktif Alarm Eşiği</span><strong>{threshold:.2f}</strong></div>
+                    <div class="mh-stat-row"><span>Kilitli Test Seti</span><strong>1.057 Abone</strong></div>
+                    <div class="mh-stat-row"><span>Yarıştırılan Model</span><strong>7 Rakip + 2 Baseline</strong></div>
+                    <div class="mh-stat-row"><span>Baseline Kazancı</span><strong style="color:#34D399;">2,55× PR-AUC</strong></div>
+                </div>
             </div>
         </div>
         """
@@ -690,12 +824,12 @@ st.markdown(
             <div class="kpi-tile">
                 <div class="kpi-kicker">Churn Yakalama (Recall)</div>
                 <div class="kpi-num">%{test_rec * 100:.1f}</div>
-                <div class="kpi-meta">Aktif karar eşiği: {threshold:.2f}</div>
+                <div class="kpi-meta">281 ayrılanın 214'ü yakalandı</div>
             </div>
             <div class="kpi-tile">
                 <div class="kpi-kicker">Şampiyon Algoritma</div>
                 <div class="kpi-num">{champ_name}</div>
-                <div class="kpi-meta">7 güçlü rakip arasından seçildi</div>
+                <div class="kpi-meta">Eşit bütçeli CV + test lideri</div>
             </div>
         </div>
         """
@@ -713,17 +847,17 @@ tab1, tab2, tab3, tab4 = st.tabs(
 )
 
 # ==========================================================
-# TAB 1: MODERN SPLIT LIVE WORKSPACE (NO CLASSIC FORM WALL!)
+# TAB 1: SPLIT LIVE RETENTION STUDIO
 # ==========================================================
 with tab1:
     ws_left, ws_right = st.columns([1.05, 1.15], gap="large")
 
-    # ---------- LEFT COLUMN: SLEEK LIVE CUSTOMER CONTROLS ----------
+    # ---------- LEFT COLUMN: LIVE CUSTOMER PARAMETERS ----------
     with ws_left:
         st.markdown('<div class="studio-label">01 · CANLI MÜŞTERİ PROFİLİ</div>', unsafe_allow_html=True)
         st.markdown('<div class="sec-head">Temel Risk Parametreleri</div>', unsafe_allow_html=True)
         st.markdown(
-            '<div class="sec-sub">Her değişiklik sağdaki CatBoost kadranını ve tutundurma simülatörünü anında günceller.</div>',
+            '<div class="sec-sub">Her değişiklik sağdaki AboneRadar kadranını ve tutundurma simülatörünü anında günceller.</div>',
             unsafe_allow_html=True,
         )
 
@@ -859,13 +993,13 @@ with tab1:
     # ---------- RIGHT COLUMN: LIVE RISK DOSSIER + WHAT-IF IMPACT ----------
     with ws_right:
         st.markdown('<div class="studio-label">03 · ANLIK KARAR RAPORU</div>', unsafe_allow_html=True)
-        dial_svg = render_editorial_dial(prob, threshold, dial_col)
+        dial_svg = render_radar_dial(prob, threshold, dial_col)
         st.markdown(
             f'<div class="dossier-card" style="text-align:center;">'
             f'<span class="status-tag {tag_cls}">{band}</span>'
             f"{dial_svg}"
             f'<div style="font-size:1.05rem; font-weight:700; color:#F8FAFC; margin-top:4px;">{pred_label}</div>'
-            f'<div style="font-size:0.84rem; color:#9CA3AF; margin-top:6px;">{advice}</div>'
+            f'<div style="font-size:0.85rem; color:#94A3B8; margin-top:6px;">{advice}</div>'
             f"</div>",
             unsafe_allow_html=True,
         )
@@ -896,7 +1030,7 @@ with tab1:
                         <div style="font-size:0.70rem; font-weight:700; letter-spacing:0.10em; text-transform:uppercase; color:#34D399; margin-bottom:4px;">
                             CANLI TUTUNDURMA ETKİSİ · GERÇEK CATBOOST SİMÜLASYONU
                         </div>
-                        <div style="font-size:0.85rem; color:#D1D5DB;">
+                        <div style="font-size:0.85rem; color:#CBD5E1;">
                             <strong>Seçili Aksiyonlar:</strong> {" + ".join(applied_actions)}
                         </div>
                         <div class="wi-metrics">
@@ -913,15 +1047,15 @@ with tab1:
                                 <div class="wi-mini-val" style="color:#60A5FA;">-{delta_pp:.1f} p</div>
                             </div>
                         </div>
-                        <div style="display:flex; justify-content:space-between; font-size:0.80rem; color:#9CA3AF;">
+                        <div style="display:flex; justify-content:space-between; font-size:0.80rem; color:#94A3B8;">
                             <span>Müdahale Öncesi</span><strong>%{prob * 100:.1f}</strong>
                         </div>
                         <div class="wi-bar-bg"><div class="wi-fill-now" style="width:{min(100, prob * 100):.1f}%;"></div></div>
-                        <div style="display:flex; justify-content:space-between; font-size:0.80rem; color:#9CA3AF;">
+                        <div style="display:flex; justify-content:space-between; font-size:0.80rem; color:#94A3B8;">
                             <span>Müdahale Sonrası</span><strong style="color:#34D399;">%{sim_prob * 100:.1f}</strong>
                         </div>
                         <div class="wi-bar-bg"><div class="wi-fill-opt" style="width:{min(100, sim_prob * 100):.1f}%;"></div></div>
-                        <div style="font-size:0.83rem; color:#E5E7EB;">
+                        <div style="font-size:0.83rem; color:#E2E8F0;">
                             Korunan Yıllık Abonelik Geliri Potansiyeli: <strong style="color:#60A5FA;">${annual_rev:,.0f}</strong>
                         </div>
                     </div>
@@ -937,8 +1071,8 @@ with tab1:
                         <div style="font-size:0.71rem; font-weight:700; letter-spacing:0.10em; text-transform:uppercase; color:#34D399; margin-bottom:4px;">
                             KORUMA DURUMU · YILLIK DEĞER ${annual_rev:,.0f}
                         </div>
-                        <div style="font-size:0.86rem; color:#E5E7EB;">
-                            Ek aksiyon seçilmedi veya müşteri zaten uzun dönemli sözleşme ve koruma paketleriyle düşük risk bandında.
+                        <div style="font-size:0.86rem; color:#E2E8F0;">
+                            Ek aksiyon seçilmedi veya abone zaten uzun dönemli sözleşme ve koruma paketleriyle düşük risk bandında.
                         </div>
                     </div>
                     """
@@ -953,7 +1087,7 @@ with tab1:
                 f'<div class="signal-card {kind}">'
                 f'<span class="sig-badge {kind}">{lbl_txt}</span>'
                 f'<strong style="color:#F8FAFC;">{title}:</strong> '
-                f'<span style="color:#D1D5DB;">{desc}</span>'
+                f'<span style="color:#CBD5E1;">{desc}</span>'
                 f"</div>",
                 unsafe_allow_html=True,
             )
@@ -964,7 +1098,7 @@ with tab1:
 with tab2:
     st.markdown('<div class="sec-head">Toplu Müşteri Risk Skorlama</div>', unsafe_allow_html=True)
     st.markdown(
-        '<div class="sec-sub">Kendi CSV listenizi yükleyin veya canlı demo için tek tıkla 60 müşterilik örnek veriyi skorlayın.</div>',
+        '<div class="sec-sub">Kendi CSV listenizi yükleyin veya AboneRadar canlı demosu için tek tıkla 60 müşterilik örnek veriyi skorlayın.</div>',
         unsafe_allow_html=True,
     )
 
@@ -1020,7 +1154,7 @@ with tab2:
             st.download_button(
                 "Risk Skorlama Raporunu CSV Olarak İndir",
                 data=csv_bytes,
-                file_name="telco_churn_tahminleri.csv",
+                file_name="aboneradar_churn_tahminleri.csv",
                 mime="text/csv",
                 type="primary",
             )
@@ -1029,7 +1163,7 @@ with tab2:
 # TAB 3: MODEL CARD & BENCHMARK COMPARISON
 # ==========================================================
 with tab3:
-    st.markdown('<div class="sec-head">Şampiyon Model Kartı (Model Card)</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sec-head">AboneRadar · Şampiyon Model Kartı (Model Card)</div>', unsafe_allow_html=True)
     st.markdown(
         _html(
             """
@@ -1144,8 +1278,8 @@ st.markdown(
     _html(
         """
         <div class="footer-note">
-            <strong style="color:#F8FAFC;">Model Sınırlılığı ve Sorumlu Kullanım Notu:</strong>
-            Bu platform, IBM Telco Customer Churn kesit veri setiyle eğitilmiş olasılıksal bir tahmin modeli sunar;
+            <strong style="color:#F8FAFC;">AboneRadar · Model Sınırlılığı ve Sorumlu Kullanım Notu:</strong>
+            AboneRadar, IBM Telco Customer Churn kesit veri setiyle eğitilmiş olasılıksal bir tahmin modeli sunar;
             kesin sonuç garanti etmez ve yanlış pozitif (FP) veya yanlış negatif (FN) tahminler içerebilir.
             Çıktılar, iş kararlarında tek başına değil, müşteri ilişkileri uzman değerlendirmesiyle birlikte kullanılmalıdır.
         </div>
