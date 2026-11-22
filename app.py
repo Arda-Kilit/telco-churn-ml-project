@@ -45,39 +45,41 @@ def _html(raw: str) -> str:
 
 
 # ==========================================================
-# BESPOKE EDITORIAL-GRAPHITE & CHAMPAGNE DESIGN SYSTEM (CSS)
+# REFINED CARBON & COOL SLATE DESIGN SYSTEM (LINEAR / APPLE-PRO AESTHETIC)
+# 90% calm matte neutral surfaces + surgical blue UI accent + semantic risk colors
 # ==========================================================
 st.markdown(
     _html(
         """
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
         :root {
-            --bg-canvas: #0F1115;
-            --bg-card: #161920;
-            --bg-elevated: #1D212B;
-            --border-subtle: rgba(244, 241, 234, 0.09);
-            --border-strong: rgba(217, 167, 96, 0.34);
-            --ink-primary: #F4F1EA;
-            --ink-muted: #9CA3AF;
-            --gold: #D9A760;
-            --sage: #34D399;
-            --crimson: #FB7185;
-            --amber: #FBBF24;
+            --bg-canvas: #090C10;
+            --bg-card: #11161F;
+            --bg-elevated: #161C27;
+            --border-subtle: rgba(226, 232, 240, 0.09);
+            --border-accent: rgba(96, 165, 250, 0.34);
+            --ink-primary: #F8FAFC;
+            --ink-muted: #94A3B8;
+            --ui-accent: #60A5FA;
+            --ui-primary: #3B82F6;
+            --sage: #10B981;
+            --crimson: #F43F5E;
+            --amber: #F59E0B;
         }
 
         html, body, [class*="css"] {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             color: var(--ink-primary);
         }
         .stApp { background-color: var(--bg-canvas); }
         [data-testid="stHeader"] {
-            background: rgba(15, 17, 21, 0.85);
-            backdrop-filter: blur(10px);
+            background: rgba(9, 12, 16, 0.86);
+            backdrop-filter: blur(12px);
         }
         [data-testid="stSidebar"] {
-            background-color: #13161C;
+            background-color: #0D1117;
             border-right: 1px solid var(--border-subtle);
         }
         .block-container {
@@ -86,10 +88,12 @@ st.markdown(
             max-width: 1260px;
         }
 
-        /* Editorial Masthead */
+        /* Executive Masthead */
         .masthead {
-            background: linear-gradient(145deg, #161920 0%, #12151B 100%);
+            background: radial-gradient(circle at 92% 10%, rgba(59, 130, 246, 0.14), transparent 38%),
+                        linear-gradient(180deg, #131924 0%, #0E131B 100%);
             border: 1px solid var(--border-subtle);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 12px 28px rgba(0, 0, 0, 0.28);
             border-radius: 16px;
             padding: 24px 30px;
             margin-bottom: 1.15rem;
@@ -100,7 +104,7 @@ st.markdown(
             content: "";
             position: absolute;
             top: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, transparent 0%, #D9A760 28%, #34D399 72%, transparent 100%);
+            background: linear-gradient(90deg, transparent 0%, #3B82F6 35%, #10B981 70%, transparent 100%);
         }
         .mh-top {
             display: flex;
@@ -113,9 +117,9 @@ st.markdown(
         .mh-kicker {
             font-size: 0.72rem;
             font-weight: 700;
-            letter-spacing: 0.14em;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: var(--gold);
+            color: var(--ui-accent);
         }
         .live-badge {
             display: inline-flex;
@@ -124,24 +128,23 @@ st.markdown(
             font-size: 0.74rem;
             font-weight: 600;
             color: #A7F3D0;
-            background: rgba(52, 211, 153, 0.10);
-            border: 1px solid rgba(52, 211, 153, 0.28);
+            background: rgba(16, 185, 129, 0.10);
+            border: 1px solid rgba(16, 185, 129, 0.28);
             padding: 4px 12px;
             border-radius: 999px;
         }
         .live-dot {
             width: 7px; height: 7px; border-radius: 50%;
-            background: #34D399;
-            box-shadow: 0 0 8px #34D399;
+            background: #10B981;
+            box-shadow: 0 0 8px #10B981;
         }
         .mh-title {
-            font-family: 'Newsreader', Georgia, serif;
-            font-size: 2.05rem;
-            font-weight: 700;
-            color: #F8F6F1;
+            font-size: 1.88rem;
+            font-weight: 800;
+            color: #F8FAFC;
             margin: 0 0 6px 0;
-            line-height: 1.16;
-            letter-spacing: -0.015em;
+            line-height: 1.2;
+            letter-spacing: -0.025em;
         }
         .mh-sub {
             font-size: 0.91rem;
@@ -151,7 +154,7 @@ st.markdown(
             line-height: 1.5;
         }
 
-        /* KPI Strip */
+        /* Clean KPI Strip */
         .kpi-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -164,48 +167,49 @@ st.markdown(
         .kpi-tile {
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
             border-radius: 14px;
-            padding: 14px 18px;
+            padding: 15px 18px;
         }
         .kpi-tile.featured {
-            border-color: var(--border-strong);
-            background: linear-gradient(180deg, rgba(217, 167, 96, 0.08) 0%, #161920 100%);
+            border-color: var(--border-accent);
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.10) 0%, #11161F 100%);
         }
         .kpi-kicker {
             font-size: 0.69rem;
             font-weight: 700;
-            letter-spacing: 0.10em;
+            letter-spacing: 0.09em;
             text-transform: uppercase;
             color: var(--ink-muted);
             margin-bottom: 5px;
         }
         .kpi-num {
-            font-family: 'Newsreader', Georgia, serif;
-            font-size: 1.78rem;
-            font-weight: 700;
+            font-size: 1.70rem;
+            font-weight: 800;
             color: var(--ink-primary);
-            line-height: 1.1;
+            line-height: 1.12;
+            letter-spacing: -0.02em;
             font-variant-numeric: tabular-nums;
             margin-bottom: 3px;
         }
-        .kpi-tile.featured .kpi-num { color: var(--gold); }
+        .kpi-tile.featured .kpi-num { color: var(--ui-accent); }
         .kpi-meta { font-size: 0.77rem; color: var(--ink-muted); }
 
-        /* Workspace Studio Cards */
+        /* Workspace Studio Typography */
         .studio-label {
-            font-size: 0.71rem;
+            font-size: 0.70rem;
             font-weight: 700;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.11em;
             text-transform: uppercase;
-            color: var(--gold);
+            color: var(--ui-accent);
             margin-bottom: 4px;
         }
         .sec-head {
-            font-family: 'Newsreader', Georgia, serif;
-            font-size: 1.32rem;
+            font-size: 1.22rem;
             font-weight: 700;
+            letter-spacing: -0.015em;
             color: var(--ink-primary);
-            margin: 0 0 0.25rem 0;
+            margin: 0 0 0.22rem 0;
         }
         .sec-sub {
             font-size: 0.85rem;
@@ -216,6 +220,7 @@ st.markdown(
         .dossier-card {
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
             border-radius: 16px;
             padding: 20px 22px;
             margin-bottom: 14px;
@@ -226,18 +231,18 @@ st.markdown(
             border-radius: 999px;
             font-size: 0.71rem;
             font-weight: 700;
-            letter-spacing: 0.09em;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
             margin-bottom: 8px;
         }
-        .tag-high { background: rgba(251, 113, 133, 0.14); color: #FDA4AF; border: 1px solid rgba(251, 113, 133, 0.36); }
-        .tag-mid  { background: rgba(251, 191, 36, 0.14); color: #FDE68A; border: 1px solid rgba(251, 191, 36, 0.36); }
-        .tag-low  { background: rgba(52, 211, 153, 0.14); color: #A7F3D0; border: 1px solid rgba(52, 211, 153, 0.36); }
+        .tag-high { background: rgba(244, 63, 94, 0.14); color: #FDA4AF; border: 1px solid rgba(244, 63, 94, 0.36); }
+        .tag-mid  { background: rgba(245, 158, 11, 0.14); color: #FDE68A; border: 1px solid rgba(245, 158, 11, 0.36); }
+        .tag-low  { background: rgba(16, 185, 129, 0.14); color: #A7F3D0; border: 1px solid rgba(16, 185, 129, 0.36); }
 
         /* Retention Lab Card */
         .whatif-box {
-            background: linear-gradient(145deg, rgba(52, 211, 153, 0.09) 0%, rgba(217, 167, 96, 0.06) 100%);
-            border: 1px solid rgba(52, 211, 153, 0.30);
+            background: linear-gradient(145deg, rgba(16, 185, 129, 0.08) 0%, rgba(59, 130, 246, 0.06) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.28);
             border-radius: 16px;
             padding: 18px 20px;
             margin-top: 10px;
@@ -250,7 +255,7 @@ st.markdown(
             margin: 12px 0;
         }
         .wi-mini {
-            background: rgba(15, 17, 21, 0.55);
+            background: rgba(9, 12, 16, 0.62);
             border: 1px solid var(--border-subtle);
             border-radius: 10px;
             padding: 10px 12px;
@@ -264,21 +269,21 @@ st.markdown(
             margin-bottom: 4px;
         }
         .wi-mini-val {
-            font-family: 'Newsreader', Georgia, serif;
-            font-size: 1.32rem;
-            font-weight: 700;
+            font-size: 1.28rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
             font-variant-numeric: tabular-nums;
         }
         .wi-bar-bg {
             width: 100%;
             height: 8px;
-            background: rgba(244, 241, 234, 0.09);
+            background: rgba(226, 232, 240, 0.09);
             border-radius: 999px;
             overflow: hidden;
             margin: 5px 0 11px 0;
         }
-        .wi-fill-now { height: 100%; border-radius: 999px; background: #FB7185; }
-        .wi-fill-opt { height: 100%; border-radius: 999px; background: #34D399; }
+        .wi-fill-now { height: 100%; border-radius: 999px; background: #F43F5E; }
+        .wi-fill-opt { height: 100%; border-radius: 999px; background: #10B981; }
 
         .signal-card {
             background: var(--bg-card);
@@ -289,8 +294,8 @@ st.markdown(
             font-size: 0.85rem;
             line-height: 1.48;
         }
-        .signal-card.risk { border-left: 3px solid #FB7185; }
-        .signal-card.safe { border-left: 3px solid #34D399; }
+        .signal-card.risk { border-left: 3px solid #F43F5E; }
+        .signal-card.safe { border-left: 3px solid #10B981; }
         .sig-badge {
             font-size: 0.67rem;
             font-weight: 700;
@@ -314,23 +319,23 @@ st.markdown(
         .mc-box {
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
-            border-top: 2px solid var(--gold);
+            border-top: 2px solid var(--ui-primary);
             border-radius: 12px;
             padding: 16px 18px;
             font-size: 0.86rem;
             line-height: 1.55;
-            color: #D1D5DB;
+            color: #CBD5E1;
         }
         .mc-lbl {
             font-size: 0.70rem;
             font-weight: 700;
             letter-spacing: 0.10em;
             text-transform: uppercase;
-            color: var(--gold);
+            color: var(--ui-accent);
             margin-bottom: 7px;
         }
 
-        /* Tabs & Primary Buttons */
+        /* Tabs & Buttons */
         .stTabs [data-baseweb="tab-list"] {
             gap: 6px;
             border-bottom: 1px solid var(--border-subtle);
@@ -341,29 +346,29 @@ st.markdown(
             border-radius: 8px 8px 0 0;
             padding: 10px 18px;
             font-weight: 600;
-            font-size: 0.88rem;
+            font-size: 0.87rem;
             color: var(--ink-muted);
         }
         .stTabs [aria-selected="true"] {
             color: var(--ink-primary) !important;
             background: var(--bg-card) !important;
-            border-bottom: 2px solid var(--gold) !important;
+            border-bottom: 2px solid var(--ui-primary) !important;
         }
         div.stButton > button[kind="primary"] {
-            background: linear-gradient(135deg, #D9A760 0%, #B8863B 100%);
-            color: #0F1115;
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+            color: #FFFFFF;
             border: none;
-            font-weight: 700;
+            font-weight: 600;
             border-radius: 10px;
             padding: 0.60rem 1.15rem;
         }
-        div.stButton > button[kind="primary"]:hover { filter: brightness(1.06); }
+        div.stButton > button[kind="primary"]:hover { filter: brightness(1.08); }
 
         .footer-note {
             margin-top: 2rem;
             padding: 14px 18px;
             border-radius: 12px;
-            background: rgba(244, 241, 234, 0.03);
+            background: rgba(226, 232, 240, 0.03);
             border: 1px solid var(--border-subtle);
             font-size: 0.80rem;
             line-height: 1.55;
@@ -493,8 +498,8 @@ def render_editorial_dial(prob: float, threshold: float, color: str) -> str:
         '<svg viewBox="0 0 230 134" width="250" height="146" xmlns="http://www.w3.org/2000/svg">'
         '<path d="M 29 108 A 86 86 0 0 1 201 108" fill="none" stroke="rgba(244,241,234,0.10)" stroke-width="14" stroke-linecap="round"/>'
         f'<path d="M 29 108 A 86 86 0 0 1 201 108" fill="none" stroke="{color}" stroke-width="14" stroke-linecap="round" stroke-dasharray="{filled:.1f} {empty:.1f}"/>'
-        f'<line x1="{tx1:.1f}" y1="{ty1:.1f}" x2="{tx2:.1f}" y2="{ty2:.1f}" stroke="#D9A760" stroke-width="2.6" stroke-linecap="round"/>'
-        f'<text x="115" y="90" text-anchor="middle" fill="#F8F6F1" font-size="33" font-weight="700" font-family="Newsreader, Georgia, serif">%{pct * 100:.1f}</text>'
+        f'<line x1="{tx1:.1f}" y1="{ty1:.1f}" x2="{tx2:.1f}" y2="{ty2:.1f}" stroke="#60A5FA" stroke-width="2.6" stroke-linecap="round"/>'
+        f'<text x="115" y="90" text-anchor="middle" fill="#F8FAFC" font-size="33" font-weight="700" font-family="Inter, sans-serif">%{pct * 100:.1f}</text>'
         f'<text x="115" y="116" text-anchor="middle" fill="#9CA3AF" font-size="10" font-weight="600" letter-spacing="0.08em" font-family="Plus Jakarta Sans, sans-serif">CHURN OLASILIĞI · EŞİK {threshold:.2f}</text>'
         "</svg></div>"
     )
@@ -589,10 +594,10 @@ with st.sidebar:
         _html(
             """
             <div style="padding:4px 0 12px 0; border-bottom:1px solid rgba(244,241,234,0.09); margin-bottom:14px;">
-                <div style="font-size:0.70rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#D9A760;">
+                <div style="font-size:0.70rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#60A5FA;">
                     KONTROL PANELİ
                 </div>
-                <div style="font-family:'Newsreader',Georgia,serif; font-size:1.25rem; font-weight:700; color:#F4F1EA; margin-top:2px;">
+                <div style="font-family:'Inter',sans-serif; font-size:1.25rem; font-weight:700; color:#F8FAFC; margin-top:2px;">
                     Canlı Demo Senaryoları
                 </div>
             </div>
@@ -610,7 +615,7 @@ with st.sidebar:
 
     st.divider()
     st.markdown(
-        '<div style="font-size:0.72rem; font-weight:700; letter-spacing:0.10em; text-transform:uppercase; color:#D9A760; margin-bottom:6px;">KARAR EŞİĞİ (THRESHOLD)</div>',
+        '<div style="font-size:0.72rem; font-weight:700; letter-spacing:0.10em; text-transform:uppercase; color:#60A5FA; margin-bottom:6px;">KARAR EŞİĞİ (THRESHOLD)</div>',
         unsafe_allow_html=True,
     )
     threshold = st.slider(
@@ -631,7 +636,7 @@ with st.sidebar:
     st.markdown(
         _html(
             """
-            <div style="font-size:0.72rem; font-weight:700; letter-spacing:0.10em; text-transform:uppercase; color:#D9A760; margin-bottom:8px;">
+            <div style="font-size:0.72rem; font-weight:700; letter-spacing:0.10em; text-transform:uppercase; color:#60A5FA; margin-bottom:8px;">
                 PROJE KÜNYESİ
             </div>
             <div style="font-size:0.84rem; line-height:1.7; color:#D1D5DB;">
@@ -639,7 +644,7 @@ with st.sidebar:
                 <strong>Program:</strong> BTK Uçtan Uca ML<br>
                 <strong>Veri Seti:</strong> IBM Telco (7.043)<br>
                 <strong>Model:</strong> CatBoost (Tuned)<br>
-                <strong>Kod:</strong> <a href="https://github.com/Arda-Kilit/telco-churn-ml-project" style="color:#D9A760;">GitHub Deposu</a>
+                <strong>Kod:</strong> <a href="https://github.com/Arda-Kilit/telco-churn-ml-project" style="color:#60A5FA;">GitHub Deposu</a>
             </div>
             """
         ),
@@ -859,7 +864,7 @@ with tab1:
             f'<div class="dossier-card" style="text-align:center;">'
             f'<span class="status-tag {tag_cls}">{band}</span>'
             f"{dial_svg}"
-            f'<div style="font-size:1.05rem; font-weight:700; color:#F8F6F1; margin-top:4px;">{pred_label}</div>'
+            f'<div style="font-size:1.05rem; font-weight:700; color:#F8FAFC; margin-top:4px;">{pred_label}</div>'
             f'<div style="font-size:0.84rem; color:#9CA3AF; margin-top:6px;">{advice}</div>'
             f"</div>",
             unsafe_allow_html=True,
@@ -905,7 +910,7 @@ with tab1:
                             </div>
                             <div class="wi-mini">
                                 <div class="wi-mini-lbl">Risk Düşüşü</div>
-                                <div class="wi-mini-val" style="color:#D9A760;">-{delta_pp:.1f} p</div>
+                                <div class="wi-mini-val" style="color:#60A5FA;">-{delta_pp:.1f} p</div>
                             </div>
                         </div>
                         <div style="display:flex; justify-content:space-between; font-size:0.80rem; color:#9CA3AF;">
@@ -917,7 +922,7 @@ with tab1:
                         </div>
                         <div class="wi-bar-bg"><div class="wi-fill-opt" style="width:{min(100, sim_prob * 100):.1f}%;"></div></div>
                         <div style="font-size:0.83rem; color:#E5E7EB;">
-                            Korunan Yıllık Abonelik Geliri Potansiyeli: <strong style="color:#D9A760;">${annual_rev:,.0f}</strong>
+                            Korunan Yıllık Abonelik Geliri Potansiyeli: <strong style="color:#60A5FA;">${annual_rev:,.0f}</strong>
                         </div>
                     </div>
                     """
@@ -947,7 +952,7 @@ with tab1:
             st.markdown(
                 f'<div class="signal-card {kind}">'
                 f'<span class="sig-badge {kind}">{lbl_txt}</span>'
-                f'<strong style="color:#F8F6F1;">{title}:</strong> '
+                f'<strong style="color:#F8FAFC;">{title}:</strong> '
                 f'<span style="color:#D1D5DB;">{desc}</span>'
                 f"</div>",
                 unsafe_allow_html=True,
@@ -1031,7 +1036,7 @@ with tab3:
             <div class="mc-grid">
                 <div class="mc-box">
                     <div class="mc-lbl">Mimari ve Hiperparametreler</div>
-                    <strong style="color:#F8F6F1;">CatBoostClassifier (Tuned)</strong><br>
+                    <strong style="color:#F8FAFC;">CatBoostClassifier (Tuned)</strong><br>
                     iterations=400 · depth=4 · lr=0,02 · L2=10<br>
                     auto_class_weights="Balanced" · seed=42
                 </div>
@@ -1043,7 +1048,7 @@ with tab3:
                 </div>
                 <div class="mc-box">
                     <div class="mc-lbl">Kilitli Test ve Hata Profili</div>
-                    PR-AUC: <strong style="color:#D9A760;">0,6772</strong> · ROC-AUC: <strong style="color:#F8F6F1;">0,8445</strong><br>
+                    PR-AUC: <strong style="color:#60A5FA;">0,6772</strong> · ROC-AUC: <strong style="color:#F8FAFC;">0,8445</strong><br>
                     TP=214 · TN=593 · FP=183 · FN=67 (%76,2 Recall)<br>
                     İki yıllık sözleşmede %98,1 doğruluk
                 </div>
@@ -1139,7 +1144,7 @@ st.markdown(
     _html(
         """
         <div class="footer-note">
-            <strong style="color:#F4F1EA;">Model Sınırlılığı ve Sorumlu Kullanım Notu:</strong>
+            <strong style="color:#F8FAFC;">Model Sınırlılığı ve Sorumlu Kullanım Notu:</strong>
             Bu platform, IBM Telco Customer Churn kesit veri setiyle eğitilmiş olasılıksal bir tahmin modeli sunar;
             kesin sonuç garanti etmez ve yanlış pozitif (FP) veya yanlış negatif (FN) tahminler içerebilir.
             Çıktılar, iş kararlarında tek başına değil, müşteri ilişkileri uzman değerlendirmesiyle birlikte kullanılmalıdır.
